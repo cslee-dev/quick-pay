@@ -1,0 +1,24 @@
+spring:
+  jpa:
+    defer-datasource-initialization: true
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+  datasource:
+    url: jdbc:mysql://localhost:13306/quickpay
+    username: quickpay
+    password: quickpay
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      password: testredis
+  sql:
+    init:
+      mode: always

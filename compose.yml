@@ -1,0 +1,25 @@
+version: '3.3'
+
+services:
+  redis:
+    image: redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_PASSWORD=testredis
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=1
+
+  mysql:
+    image: mysql:latest
+    restart: always
+    ports:
+      - "13306:3306"
+    cap_add:
+      - SYS_NICE
+    environment:
+      - MYSQL_ROOT_PASSWORD=quickpay
+      - MYSQL_USER=quickpay
+      - MYSQL_PASSWORD=quickpay
+      - MYSQL_DATABASE=quickpay
