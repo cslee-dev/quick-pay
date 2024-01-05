@@ -30,9 +30,16 @@ public class AccountService {
     public AccountDto createAccount(Long userId, Long initialBalance) {
         Member member = memberRepository.findById(userId)
                 .orElseThrow(() -> new AccountException(ErrorCode.USER_NOT_FOUND));
+        validatedCreateAccount(member);
         String newAccountNumber = createNewAccountNumber();
         Account account = accountRepository.save(createNewAccount(initialBalance, member, newAccountNumber));
         return AccountDto.fromEntity(account);
+    }
+
+    private void validatedCreateAccount(Member member) {
+        if(accountRepository.countByAccountUser(member).equals(10)){
+            throw new AccountException(ErrorCode.MAX_ACCOUNT_PER_USER_10);
+        }
     }
 
     private String createNewAccountNumber() {
@@ -41,7 +48,7 @@ public class AccountService {
                 .orElse("1000000000");
     }
 
-    private static Account createNewAccount(Long initialBalance, Member member, String newAccountNumber) {
+    private Account createNewAccount(Long initialBalance, Member member, String newAccountNumber) {
         return Account.builder()
                 .accountUser(member)
                 .accountStatus(AccountStatus.IN_USE)

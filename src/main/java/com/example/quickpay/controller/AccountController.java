@@ -2,7 +2,6 @@ package com.example.quickpay.controller;
 
 import com.example.quickpay.dto.CreateAccount;
 import com.example.quickpay.service.AccountService;
-import com.example.quickpay.service.dto.AccountDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
