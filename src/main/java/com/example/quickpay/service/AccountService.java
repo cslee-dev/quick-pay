@@ -13,6 +13,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import static com.example.quickpay.type.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -29,15 +34,15 @@ public class AccountService {
     @Transactional
     public AccountDto createAccount(Long userId, Long initialBalance) {
         Member member = memberRepository.findById(userId)
-                .orElseThrow(() -> new AccountException(ErrorCode.USER_NOT_FOUND));
-        validatedCreateAccount(member);
+                .orElseThrow(() -> new AccountException(USER_NOT_FOUND));
+        validateCreateAccount(member);
         String newAccountNumber = createNewAccountNumber();
         Account account = accountRepository.save(createNewAccount(initialBalance, member, newAccountNumber));
         return AccountDto.fromEntity(account);
     }
 
-    private void validatedCreateAccount(Member member) {
-        if(accountRepository.countByAccountUser(member).equals(10)){
+    private void validateCreateAccount(Member member) {
+        if (accountRepository.countByAccountUser(member).equals(10)) {
             throw new AccountException(ErrorCode.MAX_ACCOUNT_PER_USER_10);
         }
     }
@@ -58,4 +63,41 @@ public class AccountService {
                 .build();
     }
 
+    @Transactional
+    public AccountDto deleteAccount(Long userId, String accountNumber) {
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(() -> new AccountException(USER_NOT_FOUND));
+        Account account = accountRepository.findByAccountNumber(accountNumber)
+                .orElseThrow(() -> new AccountException(ErrorCode.ACCOUNT_NOT_FOUND));
+
+        validateDeleteAccount(member, account);
+
+        account.setAccountStatus(AccountStatus.UNREGISTERED);
+        account.setUnRegisteredAt(LocalDateTime.now());
+
+        return AccountDto.fromEntity(account);
+    }
+
+    private void validateDeleteAccount(Member member, Account account) {
+        if (!Objects.equals(member.getId(), account.getAccountUser().getId())) {
+            throw new AccountException(USER_ACCOUNT_UN_MATCH);
+        }
+        if (account.getAccountStatus() == AccountStatus.UNREGISTERED) {
+            throw new AccountException(ACCOUNT_ALREADY_UNREGISTERED);
+        }
+        if (account.getBalance() > 0) {
+            throw new AccountException(BALANCE_NOT_EMPTY);
+        }
+    }
+
+    public List<AccountDto> getAccountsByUserId(Long userId) {
+        Member member = memberRepository.findById(userId)
+                .orElseThrow(() -> new AccountException(USER_NOT_FOUND));
+
+        List<Account> accounts = accountRepository.findByAccountUser(member);
+
+        return accounts.stream()
+                .map(AccountDto::fromEntity)
+                .collect(Collectors.toList());
+    }
 }

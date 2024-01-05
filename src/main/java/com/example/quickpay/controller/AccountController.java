@@ -1,13 +1,15 @@
 package com.example.quickpay.controller;
 
+import com.example.quickpay.dto.AccountInfo;
 import com.example.quickpay.dto.CreateAccount;
+import com.example.quickpay.dto.DeleteAccount;
 import com.example.quickpay.service.AccountService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,6 +24,22 @@ public class AccountController {
                         request.getUserId(), request.getInitialBalance()
                 )
         );
+    }
+
+    @DeleteMapping("/account")
+    public DeleteAccount.Response deleteAccount(@RequestBody @Valid DeleteAccount.Request request) {
+        return DeleteAccount.Response.from(
+                accountService.deleteAccount(
+                        request.getUserId(), request.getAccountNumber()
+                )
+        );
+    }
+
+    @GetMapping("/account")
+    public List<AccountInfo> getAccountsByUserId(@RequestParam("user_id") Long userId) {
+        return accountService.getAccountsByUserId(userId).stream()
+                .map(AccountInfo::from)
+                .collect(Collectors.toList());
     }
 
 }

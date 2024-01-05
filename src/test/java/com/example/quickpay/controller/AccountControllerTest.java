@@ -1,6 +1,7 @@
 package com.example.quickpay.controller;
 
 import com.example.quickpay.dto.CreateAccount;
+import com.example.quickpay.dto.DeleteAccount;
 import com.example.quickpay.service.AccountService;
 import com.example.quickpay.service.dto.AccountDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,10 +14,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.anyLong;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -55,4 +59,58 @@ class AccountControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName("계좌 해지 성공")
+    void successDeleteAccount() throws Exception {
+        //given
+        AccountDto accountDto = AccountDto.builder()
+                .userId(1L)
+                .accountNumber("1234567890")
+                .registeredAt(LocalDateTime.now())
+                .unRegisteredAt(LocalDateTime.now())
+                .build();
+        given(accountService.deleteAccount(anyLong(), anyString()))
+                .willReturn(accountDto);
+        //when
+        //then
+        mockMvc.perform(delete("/api/v1/account")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(
+                                new DeleteAccount.Request(accountDto.getUserId(), accountDto.getAccountNumber())
+                        )))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.userId").value(1))
+                .andExpect(jsonPath("$.accountNumber").value("1234567890"))
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("사용자 계좌 리스트 조회 성공")
+    void  successGetAccountsByUserId() throws Exception {
+        //given
+        AccountDto accountDto = AccountDto.builder()
+                .userId(1L)
+                .accountNumber("1234567890")
+                .balance(1000L)
+                .registeredAt(LocalDateTime.now())
+                .unRegisteredAt(LocalDateTime.now())
+                .build();
+        AccountDto accountDto2 = AccountDto.builder()
+                .userId(1L)
+                .balance(100L)
+                .accountNumber("1234567891")
+                .registeredAt(LocalDateTime.now())
+                .unRegisteredAt(LocalDateTime.now())
+                .build();
+        List<AccountDto> accountDtos = Arrays.asList(accountDto,accountDto2);
+
+        given(accountService.getAccountsByUserId(anyLong()))
+                .willReturn(accountDtos);
+        //when
+        //then
+        mockMvc.perform(get("/api/v1/account?user_id=1"))
+                .andDo(print())
+                .andExpect(jsonPath("$[0].accountNumber").value(accountDto.getAccountNumber()))
+                .andExpect(jsonPath("$[0].balance").value(accountDto.getBalance()));
+     }
 }
