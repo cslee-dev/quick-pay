@@ -1,5 +1,6 @@
 package com.example.quickpay.controller;
 
+import com.example.quickpay.aop.AccountLock;
 import com.example.quickpay.dto.CancelBalance;
 import com.example.quickpay.dto.QueryTransactionResponse;
 import com.example.quickpay.dto.UseBalance;
@@ -23,6 +24,7 @@ public class TransactionController {
     private final TransactionService transactionService;
 
     @PostMapping("/transaction/use")
+    @AccountLock
     public UseBalance.Response useBalance(
             @Valid @RequestBody UseBalance.Request request
     ) {
@@ -41,9 +43,10 @@ public class TransactionController {
     }
 
     @PostMapping("/transaction/cancel")
+    @AccountLock
     public CancelBalance.Response cancelBalance(
-            @Valid @RequestBody CancelBalance.Response request
-    ){
+            @Valid @RequestBody CancelBalance.Request request
+    ) {
         try {
             return CancelBalance.Response.from(
                     transactionService.cancelBalance(request.getTransactionId(), request.getAccountNumber(), request.getAmount())

@@ -1,5 +1,6 @@
 package com.example.quickpay.dto;
 
+import com.example.quickpay.aop.AccountLockIdInterface;
 import com.example.quickpay.service.dto.TransactionDto;
 import com.example.quickpay.type.TransactionResultType;
 import jakarta.validation.constraints.*;
@@ -15,9 +16,8 @@ public class CancelBalance {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class Request {
+    public static class Request implements AccountLockIdInterface {
         @NotNull
-        @Min(1)
         private String transactionId;
 
         @NotBlank

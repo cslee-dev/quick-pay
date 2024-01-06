@@ -8,12 +8,22 @@ Content-Type: application/json
   "accountNumber": "1000000000"
 }
 
+### lock test use balance
+POST http://localhost:8080/api/v1/transaction/use
+Content-Type: application/json
+
+{
+  "userId": 1,
+  "amount": 100,
+  "accountNumber": "1000000000"
+}
+
 ### cancel balance
 POST http://localhost:8080/api/v1/transaction/cancel
 Content-Type: application/json
 
 {
-  "transactionId": "79175bc00c3c4fcf89c23e4946bd3a1a",
+  "transactionId": "33a542a55fcc40c8a232b93a8d4d76df",
   "amount": 100,
   "accountNumber": "1000000000"
 }
