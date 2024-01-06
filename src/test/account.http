@@ -3,7 +3,7 @@ POST http://localhost:8080/api/v1/account
 Content-Type: application/json
 
 {
-  "userId": 2,
+  "userId": 1,
   "initialBalance": 1000
 }
 
@@ -12,7 +12,7 @@ DELETE http://localhost:8080/api/v1/account
 Content-Type: application/json
 
 {
-"userId": 2,
+"userId": 1,
 "initialBalance": 1000000000
 }
 
@@ -22,6 +22,6 @@ GET http://localhost:8080/api/v1/account?user_id=2
 Content-Type: application/json
 
 {
-  "userId": 2,
+  "userId": 1,
   "initialBalance": 1000000000
 }
