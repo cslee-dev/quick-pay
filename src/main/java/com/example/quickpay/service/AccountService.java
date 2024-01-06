@@ -2,7 +2,7 @@ package com.example.quickpay.service;
 
 import com.example.quickpay.domain.Account;
 import com.example.quickpay.domain.Member;
-import com.example.quickpay.exception.AccountException;
+import com.example.quickpay.exception.QuickPayException;
 import com.example.quickpay.repository.AccountRepository;
 import com.example.quickpay.repository.MemberRepository;
 import com.example.quickpay.service.dto.AccountDto;
@@ -34,7 +34,7 @@ public class AccountService {
     @Transactional
     public AccountDto createAccount(Long userId, Long initialBalance) {
         Member member = memberRepository.findById(userId)
-                .orElseThrow(() -> new AccountException(USER_NOT_FOUND));
+                .orElseThrow(() -> new QuickPayException(USER_NOT_FOUND));
         validateCreateAccount(member);
         String newAccountNumber = createNewAccountNumber();
         Account account = accountRepository.save(createNewAccount(initialBalance, member, newAccountNumber));
@@ -43,7 +43,7 @@ public class AccountService {
 
     private void validateCreateAccount(Member member) {
         if (accountRepository.countByAccountUser(member).equals(10)) {
-            throw new AccountException(ErrorCode.MAX_ACCOUNT_PER_USER_10);
+            throw new QuickPayException(ErrorCode.MAX_ACCOUNT_PER_USER_10);
         }
     }
 
@@ -66,9 +66,9 @@ public class AccountService {
     @Transactional
     public AccountDto deleteAccount(Long userId, String accountNumber) {
         Member member = memberRepository.findById(userId)
-                .orElseThrow(() -> new AccountException(USER_NOT_FOUND));
+                .orElseThrow(() -> new QuickPayException(USER_NOT_FOUND));
         Account account = accountRepository.findByAccountNumber(accountNumber)
-                .orElseThrow(() -> new AccountException(ErrorCode.ACCOUNT_NOT_FOUND));
+                .orElseThrow(() -> new QuickPayException(ErrorCode.ACCOUNT_NOT_FOUND));
 
         validateDeleteAccount(member, account);
 
@@ -80,24 +80,30 @@ public class AccountService {
 
     private void validateDeleteAccount(Member member, Account account) {
         if (!Objects.equals(member.getId(), account.getAccountUser().getId())) {
-            throw new AccountException(USER_ACCOUNT_UN_MATCH);
+            throw new QuickPayException(USER_ACCOUNT_UN_MATCH);
         }
         if (account.getAccountStatus() == AccountStatus.UNREGISTERED) {
-            throw new AccountException(ACCOUNT_ALREADY_UNREGISTERED);
+            throw new QuickPayException(ACCOUNT_ALREADY_UNREGISTERED);
         }
         if (account.getBalance() > 0) {
-            throw new AccountException(BALANCE_NOT_EMPTY);
+            throw new QuickPayException(BALANCE_NOT_EMPTY);
         }
     }
 
     public List<AccountDto> getAccountsByUserId(Long userId) {
         Member member = memberRepository.findById(userId)
-                .orElseThrow(() -> new AccountException(USER_NOT_FOUND));
+                .orElseThrow(() -> new QuickPayException(USER_NOT_FOUND));
 
         List<Account> accounts = accountRepository.findByAccountUser(member);
 
         return accounts.stream()
                 .map(AccountDto::fromEntity)
                 .collect(Collectors.toList());
+    }
+
+    public AccountDto getAccount(Long id) {
+        return AccountDto.fromEntity(accountRepository.findById(id)
+                .orElseThrow(() -> new QuickPayException(ACCOUNT_NOT_FOUND)
+                ));
     }
 }

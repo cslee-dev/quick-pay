@@ -1,7 +1,7 @@
 package com.example.quickpay.domain;
 
 
-import com.example.quickpay.exception.AccountException;
+import com.example.quickpay.exception.QuickPayException;
 import com.example.quickpay.type.AccountStatus;
 import com.example.quickpay.type.ErrorCode;
 import jakarta.persistence.*;
@@ -42,14 +42,14 @@ public class Account {
 
     public void useBalance(Long amount) {
         if (amount > balance) {
-            throw new AccountException(ErrorCode.AMOUNT_EXCEED_BALANCE);
+            throw new QuickPayException(ErrorCode.AMOUNT_EXCEED_BALANCE);
         }
         balance -= amount;
     }
 
     public void cancelBalance(Long amount){
         if (amount < 0) {
-            throw new AccountException(ErrorCode.INVALID_REQUEST);
+            throw new QuickPayException(ErrorCode.INVALID_REQUEST);
         }
         balance += amount;
     }

@@ -42,4 +42,11 @@ public class AccountController {
                 .collect(Collectors.toList());
     }
 
+    @GetMapping("/account/{id}")
+    public AccountInfo getAccount(
+            @PathVariable("id") Long id
+    ) {
+        return AccountInfo.from(accountService.getAccount(id));
+    }
+
 }

@@ -3,7 +3,7 @@ package com.example.quickpay.service;
 import com.example.quickpay.domain.Account;
 import com.example.quickpay.domain.Member;
 import com.example.quickpay.domain.Transaction;
-import com.example.quickpay.exception.AccountException;
+import com.example.quickpay.exception.QuickPayException;
 import com.example.quickpay.repository.AccountRepository;
 import com.example.quickpay.repository.MemberRepository;
 import com.example.quickpay.repository.TransactionRepository;
@@ -94,7 +94,7 @@ class TransactionServiceTest {
                 .willReturn(Optional.empty());
 
         //when
-        AccountException exception = assertThrows(AccountException.class,
+        QuickPayException exception = assertThrows(QuickPayException.class,
                 () -> transactionService.useBalance(1L, "1234567890", 200L));
 
         //then
@@ -114,7 +114,7 @@ class TransactionServiceTest {
         given(accountRepository.findByAccountNumber(anyString()))
                 .willReturn(Optional.empty());
         //when
-        AccountException exception = assertThrows(AccountException.class,
+        QuickPayException exception = assertThrows(QuickPayException.class,
                 () -> transactionService.useBalance(1L, "1234567890", 200L));
         //then
         assertEquals(ErrorCode.ACCOUNT_NOT_FOUND, exception.getErrorCode());
@@ -138,7 +138,7 @@ class TransactionServiceTest {
                         .accountNumber("1000000013")
                         .build()));
         //when
-        AccountException exception = assertThrows(AccountException.class,
+        QuickPayException exception = assertThrows(QuickPayException.class,
                 () -> transactionService.useBalance(1L, "1234567890", 200L));
         //then
         assertEquals(ErrorCode.USER_ACCOUNT_UN_MATCH, exception.getErrorCode());
@@ -161,7 +161,7 @@ class TransactionServiceTest {
                         .accountNumber("1000000013")
                         .build()));
         //when
-        AccountException exception = assertThrows(AccountException.class,
+        QuickPayException exception = assertThrows(QuickPayException.class,
                 () -> transactionService.useBalance(1L, "1234567890", 200L));
         //then
         assertEquals(ErrorCode.ACCOUNT_ALREADY_UNREGISTERED, exception.getErrorCode());
@@ -187,7 +187,7 @@ class TransactionServiceTest {
                 .willReturn(Optional.of(account));
 
         //when
-        AccountException exception = assertThrows(AccountException.class,
+        QuickPayException exception = assertThrows(QuickPayException.class,
                 () -> transactionService.useBalance(1L, "1234567890", 200L));
         //then
         assertEquals(ErrorCode.AMOUNT_EXCEED_BALANCE, exception.getErrorCode());
@@ -287,7 +287,7 @@ class TransactionServiceTest {
         given(accountRepository.findByAccountNumber(anyString()))
                 .willReturn(Optional.empty());
         //when
-        AccountException exception = assertThrows(AccountException.class,
+        QuickPayException exception = assertThrows(QuickPayException.class,
                 () -> transactionService.cancelBalance("transactionId", "1234567890", 200L));
         //then
         assertEquals(ErrorCode.ACCOUNT_NOT_FOUND, exception.getErrorCode());
@@ -313,7 +313,7 @@ class TransactionServiceTest {
         given(transactionRepository.findByTransactionId(any()))
                 .willReturn(Optional.empty());
         //when
-        AccountException exception = assertThrows(AccountException.class,
+        QuickPayException exception = assertThrows(QuickPayException.class,
                 () -> transactionService.cancelBalance("transactionId", "1234567890", 200L));
         //then
         assertEquals(ErrorCode.TRANSACTION_NOT_FOUND, exception.getErrorCode());
@@ -356,7 +356,7 @@ class TransactionServiceTest {
         given(transactionRepository.findByTransactionId(any()))
                 .willReturn(Optional.of(transaction));
         //when
-        AccountException exception = assertThrows(AccountException.class,
+        QuickPayException exception = assertThrows(QuickPayException.class,
                 () -> transactionService.cancelBalance("transactionId", "1234567890", 200L));
         //then
         assertEquals(ErrorCode.TRANSACTION_ACCOUNT_UN_MATCH, exception.getErrorCode());
@@ -387,7 +387,7 @@ class TransactionServiceTest {
                 .willReturn(Optional.of(transaction));
 
         //when
-        AccountException exception = assertThrows(AccountException.class,
+        QuickPayException exception = assertThrows(QuickPayException.class,
                 () -> transactionService.cancelBalance("", "1234567890", 200L));
         //then
         assertEquals(ErrorCode.CANCEL_MUST_FULLY, exception.getErrorCode());
@@ -419,7 +419,7 @@ class TransactionServiceTest {
                 .willReturn(Optional.of(transaction));
 
         //when
-        AccountException exception = assertThrows(AccountException.class,
+        QuickPayException exception = assertThrows(QuickPayException.class,
                 () -> transactionService.cancelBalance("", "1234567890", 100L));
         //then
         assertEquals(ErrorCode.TOO_OLD_TRANSACTION_TO_CANCEL, exception.getErrorCode());
@@ -465,7 +465,7 @@ class TransactionServiceTest {
         given(transactionRepository.findByTransactionId(any()))
                 .willReturn(Optional.empty());
         //when
-        AccountException exception = assertThrows(AccountException.class,
+        QuickPayException exception = assertThrows(QuickPayException.class,
                 () -> transactionService.queryTransaction("transactionId"));
         //then
         assertEquals(ErrorCode.TRANSACTION_NOT_FOUND, exception.getErrorCode());

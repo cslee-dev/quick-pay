@@ -2,7 +2,7 @@ package com.example.quickpay.service;
 
 import com.example.quickpay.domain.Account;
 import com.example.quickpay.domain.Member;
-import com.example.quickpay.exception.AccountException;
+import com.example.quickpay.exception.QuickPayException;
 import com.example.quickpay.repository.AccountRepository;
 import com.example.quickpay.repository.MemberRepository;
 import com.example.quickpay.service.dto.AccountDto;
@@ -101,7 +101,7 @@ class AccountServiceTest {
                 .willReturn(Optional.empty());
 
         //when
-        AccountException exception = assertThrows(AccountException.class,
+        QuickPayException exception = assertThrows(QuickPayException.class,
                 () -> accountService.createAccount(1L, 1000L));
 
         //then
@@ -121,7 +121,7 @@ class AccountServiceTest {
         given(accountRepository.countByAccountUser(any()))
                 .willReturn(10);
         //when
-        AccountException exception = assertThrows(AccountException.class,
+        QuickPayException exception = assertThrows(QuickPayException.class,
                 () -> accountService.createAccount(1L, 1000L));
         //then
         assertEquals(ErrorCode.MAX_ACCOUNT_PER_USER_10, exception.getErrorCode());
@@ -158,7 +158,7 @@ class AccountServiceTest {
                 .willReturn(Optional.empty());
 
         //when
-        AccountException exception = assertThrows(AccountException.class,
+        QuickPayException exception = assertThrows(QuickPayException.class,
                 () -> accountService.deleteAccount(1L, "1234567890"));
 
         //then
@@ -178,7 +178,7 @@ class AccountServiceTest {
         given(accountRepository.findByAccountNumber(anyString()))
                 .willReturn(Optional.empty());
         //when
-        AccountException exception = assertThrows(AccountException.class,
+        QuickPayException exception = assertThrows(QuickPayException.class,
                 () -> accountService.deleteAccount(1L, "1234567890"));
         //then
         assertEquals(ErrorCode.ACCOUNT_NOT_FOUND, exception.getErrorCode());
@@ -201,7 +201,7 @@ class AccountServiceTest {
                         .accountNumber("1000000013")
                         .build()));
         //when
-        AccountException exception = assertThrows(AccountException.class,
+        QuickPayException exception = assertThrows(QuickPayException.class,
                 () -> accountService.deleteAccount(1L, "1234567890"));
         //then
         assertEquals(ErrorCode.USER_ACCOUNT_UN_MATCH, exception.getErrorCode());
@@ -223,7 +223,7 @@ class AccountServiceTest {
                         .accountNumber("1000000013")
                         .build()));
         //when
-        AccountException exception = assertThrows(AccountException.class,
+        QuickPayException exception = assertThrows(QuickPayException.class,
                 () -> accountService.deleteAccount(1L, "1234567890"));
         //then
         assertEquals(ErrorCode.BALANCE_NOT_EMPTY, exception.getErrorCode());
@@ -246,7 +246,7 @@ class AccountServiceTest {
                         .accountNumber("1000000013")
                         .build()));
         //when
-        AccountException exception = assertThrows(AccountException.class,
+        QuickPayException exception = assertThrows(QuickPayException.class,
                 () -> accountService.deleteAccount(1L, "1234567890"));
         //then
         assertEquals(ErrorCode.ACCOUNT_ALREADY_UNREGISTERED, exception.getErrorCode());
@@ -307,7 +307,7 @@ class AccountServiceTest {
                 .willReturn(Optional.empty());
 
         //when
-        AccountException exception = assertThrows(AccountException.class,
+        QuickPayException exception = assertThrows(QuickPayException.class,
                 () -> accountService.getAccountsByUserId(1L));
 
         //then

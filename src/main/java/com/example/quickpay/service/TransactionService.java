@@ -3,7 +3,7 @@ package com.example.quickpay.service;
 import com.example.quickpay.domain.Account;
 import com.example.quickpay.domain.Member;
 import com.example.quickpay.domain.Transaction;
-import com.example.quickpay.exception.AccountException;
+import com.example.quickpay.exception.QuickPayException;
 import com.example.quickpay.repository.AccountRepository;
 import com.example.quickpay.repository.MemberRepository;
 import com.example.quickpay.repository.TransactionRepository;
@@ -37,9 +37,9 @@ public class TransactionService {
     @Transactional
     public TransactionDto useBalance(Long userId, String accountNumber, Long amount) {
         Member member = memberRepository.findById(userId)
-                .orElseThrow(() -> new AccountException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new QuickPayException(ErrorCode.USER_NOT_FOUND));
         Account account = accountRepository.findByAccountNumber(accountNumber)
-                .orElseThrow(() -> new AccountException(ErrorCode.ACCOUNT_NOT_FOUND));
+                .orElseThrow(() -> new QuickPayException(ErrorCode.ACCOUNT_NOT_FOUND));
         validateUseBalance(member, account, amount);
         account.useBalance(amount);
         return TransactionDto.fromEntity(saveTransaction(USE, S, account, amount));
@@ -47,13 +47,13 @@ public class TransactionService {
 
     private void validateUseBalance(Member member, Account account, Long amount) {
         if (!Objects.equals(member.getId(), account.getAccountUser().getId())) {
-            throw new AccountException(ErrorCode.USER_ACCOUNT_UN_MATCH);
+            throw new QuickPayException(ErrorCode.USER_ACCOUNT_UN_MATCH);
         }
         if (account.getAccountStatus() != AccountStatus.IN_USE) {
-            throw new AccountException(ErrorCode.ACCOUNT_ALREADY_UNREGISTERED);
+            throw new QuickPayException(ErrorCode.ACCOUNT_ALREADY_UNREGISTERED);
         }
         if (account.getBalance() < amount) {
-            throw new AccountException(ErrorCode.AMOUNT_EXCEED_BALANCE);
+            throw new QuickPayException(ErrorCode.AMOUNT_EXCEED_BALANCE);
         }
 
     }
@@ -61,7 +61,7 @@ public class TransactionService {
     @Transactional
     public void saveFailedUseTransaction(String accountNumber, Long amount) {
         Account account = accountRepository.findByAccountNumber(accountNumber)
-                .orElseThrow(() -> new AccountException(ErrorCode.ACCOUNT_NOT_FOUND));
+                .orElseThrow(() -> new QuickPayException(ErrorCode.ACCOUNT_NOT_FOUND));
         saveTransaction(USE, F, account, amount);
     }
 
@@ -81,10 +81,10 @@ public class TransactionService {
     @Transactional
     public TransactionDto cancelBalance(String transactionId, String accountNumber, Long amount) {
         Account account = accountRepository.findByAccountNumber(accountNumber)
-                .orElseThrow(() -> new AccountException(ErrorCode.ACCOUNT_NOT_FOUND));
+                .orElseThrow(() -> new QuickPayException(ErrorCode.ACCOUNT_NOT_FOUND));
 
         Transaction transaction = transactionRepository.findByTransactionId(transactionId)
-                .orElseThrow(() -> new AccountException(ErrorCode.TRANSACTION_NOT_FOUND));
+                .orElseThrow(() -> new QuickPayException(ErrorCode.TRANSACTION_NOT_FOUND));
 
         validateCancelBalance(transaction, account, amount);
 
@@ -94,26 +94,26 @@ public class TransactionService {
 
     private void validateCancelBalance(Transaction transaction, Account account, Long amount) {
         if (!Objects.equals(transaction.getAccount().getId(), account.getId())) {
-            throw new AccountException(ErrorCode.TRANSACTION_ACCOUNT_UN_MATCH);
+            throw new QuickPayException(ErrorCode.TRANSACTION_ACCOUNT_UN_MATCH);
         }
         if (!Objects.equals(transaction.getAmount(), amount)) {
-            throw new AccountException(ErrorCode.CANCEL_MUST_FULLY);
+            throw new QuickPayException(ErrorCode.CANCEL_MUST_FULLY);
         }
         if (transaction.getTransactedAt().isBefore(LocalDateTime.now().minusYears(1))) {
-            throw new AccountException(ErrorCode.TOO_OLD_TRANSACTION_TO_CANCEL);
+            throw new QuickPayException(ErrorCode.TOO_OLD_TRANSACTION_TO_CANCEL);
 
         }
     }
 
     public void saveFailedCancelTransaction(String accountNumber, Long amount) {
         Account account = accountRepository.findByAccountNumber(accountNumber)
-                .orElseThrow(() -> new AccountException(ErrorCode.ACCOUNT_NOT_FOUND));
+                .orElseThrow(() -> new QuickPayException(ErrorCode.ACCOUNT_NOT_FOUND));
         saveTransaction(CANCEL, F, account, amount);
     }
 
     public TransactionDto queryTransaction(String transactionId) {
         return TransactionDto.fromEntity(transactionRepository.findByTransactionId(transactionId)
-                .orElseThrow(() -> new AccountException(ErrorCode.TRANSACTION_NOT_FOUND)));
+                .orElseThrow(() -> new QuickPayException(ErrorCode.TRANSACTION_NOT_FOUND)));
 
     }
 }

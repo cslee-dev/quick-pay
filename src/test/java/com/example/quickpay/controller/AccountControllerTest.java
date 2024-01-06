@@ -2,6 +2,7 @@ package com.example.quickpay.controller;
 
 import com.example.quickpay.dto.CreateAccount;
 import com.example.quickpay.dto.DeleteAccount;
+import com.example.quickpay.exception.QuickPayException;
 import com.example.quickpay.service.AccountService;
 import com.example.quickpay.service.dto.AccountDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.example.quickpay.type.ErrorCode.ACCOUNT_NOT_FOUND;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -86,7 +88,7 @@ class AccountControllerTest {
 
     @Test
     @DisplayName("사용자 계좌 리스트 조회 성공")
-    void  successGetAccountsByUserId() throws Exception {
+    void successGetAccountsByUserId() throws Exception {
         //given
         AccountDto accountDto = AccountDto.builder()
                 .userId(1L)
@@ -102,7 +104,7 @@ class AccountControllerTest {
                 .registeredAt(LocalDateTime.now())
                 .unRegisteredAt(LocalDateTime.now())
                 .build();
-        List<AccountDto> accountDtos = Arrays.asList(accountDto,accountDto2);
+        List<AccountDto> accountDtos = Arrays.asList(accountDto, accountDto2);
 
         given(accountService.getAccountsByUserId(anyLong()))
                 .willReturn(accountDtos);
@@ -112,5 +114,19 @@ class AccountControllerTest {
                 .andDo(print())
                 .andExpect(jsonPath("$[0].accountNumber").value(accountDto.getAccountNumber()))
                 .andExpect(jsonPath("$[0].balance").value(accountDto.getBalance()));
-     }
+    }
+
+    @Test
+    @DisplayName("계좌 아이디 조회 실패")
+    void failedGetAccount() throws Exception {
+        //given
+        given(accountService.getAccount(anyLong()))
+                .willThrow(new QuickPayException(ACCOUNT_NOT_FOUND));
+        //then
+        mockMvc.perform(get("/api/v1/account/876"))
+                .andDo(print())
+                .andExpect(jsonPath("$.errorCode").value("ACCOUNT_NOT_FOUND"))
+                .andExpect(jsonPath("$.errorMessage").value("계좌가 없습니다."))
+                .andExpect(status().isOk());
+    }
 }
