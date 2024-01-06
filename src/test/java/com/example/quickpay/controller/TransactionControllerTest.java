@@ -1,5 +1,6 @@
 package com.example.quickpay.controller;
 
+import com.example.quickpay.dto.CancelBalance;
 import com.example.quickpay.dto.UseBalance;
 import com.example.quickpay.service.TransactionService;
 import com.example.quickpay.service.dto.TransactionDto;
@@ -35,7 +36,7 @@ class TransactionControllerTest {
 
     @Test
     @DisplayName("거래 사용 성공")
-    void successUseBalance () throws Exception {
+    void successUseBalance() throws Exception {
         //given
         given(transactionService.useBalance(anyLong(), anyString(), anyLong()))
                 .willReturn(TransactionDto.builder()
@@ -56,6 +57,30 @@ class TransactionControllerTest {
                 .andExpect(jsonPath("$.transactionId").value("transactionId"))
                 .andExpect(jsonPath("$.amount").value(1234L))
                 .andExpect(jsonPath("$.transactionResult").value("S"));
-     }
+    }
+
+    @Test
+    @DisplayName("거래 취소 성공")
+    void successCancelBalance() throws Exception {
+        //given
+        given(transactionService.cancelBalance(anyString(), anyString(), anyLong()))
+                .willReturn(TransactionDto.builder()
+                        .accountNumber("1234567890")
+                        .amount(1000L)
+                        .transactedAt(LocalDateTime.now())
+                        .transactionResultType(S)
+                        .transactionId("transactionId").build());
+        //when
+        //then
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/transaction/cancel")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new CancelBalance.Request("transactionId", "1234567890", 1000L))))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.accountNumber").value("1234567890"))
+                .andExpect(jsonPath("$.transactionId").value("transactionId"))
+                .andExpect(jsonPath("$.amount").value(1000L))
+                .andExpect(jsonPath("$.transactionResult").value("S"));
+    }
 
 }

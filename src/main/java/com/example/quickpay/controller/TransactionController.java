@@ -1,5 +1,6 @@
 package com.example.quickpay.controller;
 
+import com.example.quickpay.dto.CancelBalance;
 import com.example.quickpay.dto.UseBalance;
 import com.example.quickpay.exception.AccountException;
 import com.example.quickpay.service.TransactionService;
@@ -34,6 +35,24 @@ public class TransactionController {
         } catch (AccountException e) {
             log.error("Failed to use balance. ");
             transactionService.saveFailedUseTransaction(
+                    request.getAccountNumber(),
+                    request.getAmount()
+            );
+            throw e;
+        }
+    }
+
+    @PostMapping("/transaction/cancel")
+    public CancelBalance.Response cancelBalance(
+            @Valid @RequestBody CancelBalance.Response request
+    ){
+        try {
+            return CancelBalance.Response.from(
+                    transactionService.cancelBalance(request.getTransactionId(), request.getAccountNumber(), request.getAmount())
+            );
+        } catch (AccountException e) {
+            log.error("Failed to use balance. ");
+            transactionService.saveFailedCancelTransaction(
                     request.getAccountNumber(),
                     request.getAmount()
             );
