@@ -1,0 +1,31 @@
+@startuml
+actor 유저 as User
+participant Server
+database Database
+
+== 동시 요청 처리 ==
+User -> Server: <b>#</b>요청1 - 1번 계좌 사용
+User -> Server: \n<b>#</b>요청2 - 1번 계좌 사용
+
+Server -> Database: <b>#</b>요청1 - 1번 계좌 잔액 조회
+Database --> Server: <b>#</b>요청1 - 1번 계좌 잔액 정보 10,000원
+
+Server -> Database: \n <b>#</b>요청2 - n계좌 잔액 조회
+Database --> Server: <b>#</b>요청2 - 1번 계좌 잔액 정보 10,000원
+
+
+Server --> Database: \n<b>#</b>요청1 - 1번 계좌 잔액 10,000원에서 1,000원 사용
+
+Database --> Database: <color red><b>#요청1 - 1번 계좌 잔액 9,000원으로 UPDATE</b></color>
+
+Server --> Database: <color red><b>#요청1 - 1,000원 사용 거래 INSERT</b></color>
+
+Server --> Database: \n<b>#</b>요청2 - 1번 계좌 잔액 10,000원에서 1,000원 사용
+
+
+Database --> Database: <color red><b>#요청2 - 1번 계좌 잔액 9,000원으로 UPDATE</b></color>
+
+Server --> Database: <color red><b>#요청2 - 1,000원 사용 거래 INSERT</b></color>
+
+note over User, Database: 동시성 이슈 발생\n중복된 잔액 사용
+@enduml
