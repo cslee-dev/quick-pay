@@ -293,7 +293,6 @@ class TransactionServiceTest {
         assertEquals(ErrorCode.ACCOUNT_NOT_FOUND, exception.getErrorCode());
     }
 
-
     @Test
     @DisplayName("해당 거래 없음 - 거래 취소 실패")
     void cancelBalanceFailed_TransactionNotFound() {
@@ -424,5 +423,51 @@ class TransactionServiceTest {
                 () -> transactionService.cancelBalance("", "1234567890", 100L));
         //then
         assertEquals(ErrorCode.TOO_OLD_TRANSACTION_TO_CANCEL, exception.getErrorCode());
+    }
+
+    @Test
+    @DisplayName("거래 조회 성공")
+    void queryTransactionSuccess() {
+        Member member = Member.builder()
+                .id(12L).name("iron").build();
+        Account account = Account.builder()
+                .accountUser(member).accountStatus(IN_USE).accountNumber("1000000012")
+                .balance(0L).build();
+        Transaction transaction = Transaction.builder()
+                .id(2L)
+                .account(account)
+                .transactionType(USE)
+                .transactionResultType(S)
+                .amount(100L)
+                .balanceSnapshot(100L)
+                .transactionId("transactionId")
+                .transactedAt(LocalDateTime.now().minusYears(1))
+                .build();
+        //given
+        given(transactionRepository.findByTransactionId(anyString()))
+                .willReturn(Optional.of(transaction));
+
+        //when
+        TransactionDto transactionDto = transactionService.queryTransaction("transactionId");
+        //then
+        assertEquals(USE, transactionDto.getTransactionType());
+        assertEquals(S, transactionDto.getTransactionResultType());
+        assertEquals(100L, transactionDto.getBalanceSnapshot());
+        assertEquals(100L, transactionDto.getAmount());
+        assertEquals("transactionId", transactionDto.getTransactionId());
+    }
+
+    @Test
+    @DisplayName("해당 거래 없음 - 거래 조회 실패")
+    void queryTransactionFailed_TransactionNotFound() {
+        //given
+
+        given(transactionRepository.findByTransactionId(any()))
+                .willReturn(Optional.empty());
+        //when
+        AccountException exception = assertThrows(AccountException.class,
+                () -> transactionService.queryTransaction("transactionId"));
+        //then
+        assertEquals(ErrorCode.TRANSACTION_NOT_FOUND, exception.getErrorCode());
     }
 }

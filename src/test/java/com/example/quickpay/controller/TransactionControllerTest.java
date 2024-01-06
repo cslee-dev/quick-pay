@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import static com.example.quickpay.type.TransactionResultType.S;
 import static com.example.quickpay.type.TransactionType.USE;
 import static org.mockito.BDDMockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -83,4 +84,25 @@ class TransactionControllerTest {
                 .andExpect(jsonPath("$.transactionResult").value("S"));
     }
 
+    @Test
+    @DisplayName("거래 조회 성공")
+    void successQueryTransaction() throws Exception {
+        //given
+        given(transactionService.queryTransaction(anyString()))
+                .willReturn(TransactionDto.builder()
+                        .accountNumber("1234567890")
+                        .amount(1000L)
+                        .transactedAt(LocalDateTime.now())
+                        .transactionResultType(S)
+                        .transactionId("transactionId").build());
+        //when
+        //then
+        mockMvc.perform(get("/api/v1/transaction/transactionId"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.accountNumber").value("1234567890"))
+                .andExpect(jsonPath("$.transactionId").value("transactionId"))
+                .andExpect(jsonPath("$.amount").value(1000L))
+                .andExpect(jsonPath("$.transactionResult").value("S"));
+    }
 }
