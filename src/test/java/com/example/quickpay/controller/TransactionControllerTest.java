@@ -16,7 +16,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDateTime;
 
-import static com.example.quickpay.type.TransactionResultType.S;
+import static com.example.quickpay.type.TransactionResultType.SUCCESS;
 import static com.example.quickpay.type.TransactionType.USE;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -45,7 +45,7 @@ class TransactionControllerTest {
                         .amount(1234L)
                         .transactedAt(LocalDateTime.now())
                         .transactionType(USE)
-                        .transactionResultType(S)
+                        .transactionResultType(SUCCESS)
                         .transactionId("transactionId").build());
         //when
         //then
@@ -57,7 +57,7 @@ class TransactionControllerTest {
                 .andExpect(jsonPath("$.accountNumber").value("1234567890"))
                 .andExpect(jsonPath("$.transactionId").value("transactionId"))
                 .andExpect(jsonPath("$.amount").value(1234L))
-                .andExpect(jsonPath("$.transactionResult").value("S"));
+                .andExpect(jsonPath("$.transactionResult").value("SUCCESS"));
     }
 
     @Test
@@ -69,7 +69,7 @@ class TransactionControllerTest {
                         .accountNumber("1234567890")
                         .amount(1000L)
                         .transactedAt(LocalDateTime.now())
-                        .transactionResultType(S)
+                        .transactionResultType(SUCCESS)
                         .transactionId("transactionId").build());
         //when
         //then
@@ -81,7 +81,7 @@ class TransactionControllerTest {
                 .andExpect(jsonPath("$.accountNumber").value("1234567890"))
                 .andExpect(jsonPath("$.transactionId").value("transactionId"))
                 .andExpect(jsonPath("$.amount").value(1000L))
-                .andExpect(jsonPath("$.transactionResult").value("S"));
+                .andExpect(jsonPath("$.transactionResult").value("SUCCESS"));
     }
 
     @Test
@@ -93,7 +93,7 @@ class TransactionControllerTest {
                         .accountNumber("1234567890")
                         .amount(1000L)
                         .transactedAt(LocalDateTime.now())
-                        .transactionResultType(S)
+                        .transactionResultType(SUCCESS)
                         .transactionId("transactionId").build());
         //when
         //then
@@ -103,6 +103,6 @@ class TransactionControllerTest {
                 .andExpect(jsonPath("$.accountNumber").value("1234567890"))
                 .andExpect(jsonPath("$.transactionId").value("transactionId"))
                 .andExpect(jsonPath("$.amount").value(1000L))
-                .andExpect(jsonPath("$.transactionResult").value("S"));
+                .andExpect(jsonPath("$.transactionResult").value("SUCCESS"));
     }
 }

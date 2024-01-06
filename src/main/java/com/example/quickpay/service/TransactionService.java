@@ -21,8 +21,8 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-import static com.example.quickpay.type.TransactionResultType.F;
-import static com.example.quickpay.type.TransactionResultType.S;
+import static com.example.quickpay.type.TransactionResultType.FAILED;
+import static com.example.quickpay.type.TransactionResultType.SUCCESS;
 import static com.example.quickpay.type.TransactionType.CANCEL;
 import static com.example.quickpay.type.TransactionType.USE;
 
@@ -42,7 +42,7 @@ public class TransactionService {
                 .orElseThrow(() -> new QuickPayException(ErrorCode.ACCOUNT_NOT_FOUND));
         validateUseBalance(member, account, amount);
         account.useBalance(amount);
-        return TransactionDto.fromEntity(saveTransaction(USE, S, account, amount));
+        return TransactionDto.fromEntity(saveTransaction(USE, SUCCESS, account, amount));
     }
 
     private void validateUseBalance(Member member, Account account, Long amount) {
@@ -62,7 +62,7 @@ public class TransactionService {
     public void saveFailedUseTransaction(String accountNumber, Long amount) {
         Account account = accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new QuickPayException(ErrorCode.ACCOUNT_NOT_FOUND));
-        saveTransaction(USE, F, account, amount);
+        saveTransaction(USE, FAILED, account, amount);
     }
 
     private Transaction saveTransaction(TransactionType transactionType, TransactionResultType transactionResultType, Account account, Long amount) {
@@ -89,7 +89,7 @@ public class TransactionService {
         validateCancelBalance(transaction, account, amount);
 
         account.cancelBalance(amount);
-        return TransactionDto.fromEntity(saveTransaction(CANCEL, S, account, amount));
+        return TransactionDto.fromEntity(saveTransaction(CANCEL, SUCCESS, account, amount));
     }
 
     private void validateCancelBalance(Transaction transaction, Account account, Long amount) {
@@ -108,7 +108,7 @@ public class TransactionService {
     public void saveFailedCancelTransaction(String accountNumber, Long amount) {
         Account account = accountRepository.findByAccountNumber(accountNumber)
                 .orElseThrow(() -> new QuickPayException(ErrorCode.ACCOUNT_NOT_FOUND));
-        saveTransaction(CANCEL, F, account, amount);
+        saveTransaction(CANCEL, FAILED, account, amount);
     }
 
     public TransactionDto queryTransaction(String transactionId) {

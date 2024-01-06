@@ -22,8 +22,8 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static com.example.quickpay.type.AccountStatus.IN_USE;
-import static com.example.quickpay.type.TransactionResultType.F;
-import static com.example.quickpay.type.TransactionResultType.S;
+import static com.example.quickpay.type.TransactionResultType.FAILED;
+import static com.example.quickpay.type.TransactionResultType.SUCCESS;
 import static com.example.quickpay.type.TransactionType.CANCEL;
 import static com.example.quickpay.type.TransactionType.USE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -66,7 +66,7 @@ class TransactionServiceTest {
         given(transactionRepository.save(any()))
                 .willReturn(Transaction.builder()
                         .transactionType(USE)
-                        .transactionResultType(S)
+                        .transactionResultType(SUCCESS)
                         .account(account)
                         .amount(1000L)
                         .balanceSnapshot(9000L)
@@ -80,7 +80,7 @@ class TransactionServiceTest {
         //then
         assertEquals(200L, captor.getValue().getAmount());
         assertEquals(9800L, captor.getValue().getBalanceSnapshot());
-        assertEquals(S, transactionDto.getTransactionResultType());
+        assertEquals(SUCCESS, transactionDto.getTransactionResultType());
         assertEquals(USE, transactionDto.getTransactionType());
         assertEquals(1000L, transactionDto.getAmount());
         assertEquals(9000L, transactionDto.getBalanceSnapshot());
@@ -213,7 +213,7 @@ class TransactionServiceTest {
                 .willReturn(Transaction.builder()
                         .account(account)
                         .transactionType(USE)
-                        .transactionResultType(S)
+                        .transactionResultType(SUCCESS)
                         .transactionId("transactionId")
                         .transactedAt(LocalDateTime.now())
                         .amount(1000L)
@@ -225,7 +225,7 @@ class TransactionServiceTest {
         verify(transactionRepository, times(1)).save(captor.capture());
         assertEquals(200L, captor.getValue().getAmount());
         assertEquals(10000L, captor.getValue().getBalanceSnapshot());
-        assertEquals(F, captor.getValue().getTransactionResultType());
+        assertEquals(FAILED, captor.getValue().getTransactionResultType());
     }
 
 
@@ -246,7 +246,7 @@ class TransactionServiceTest {
         Transaction transaction = Transaction.builder()
                 .account(account)
                 .transactionType(USE)
-                .transactionResultType(S)
+                .transactionResultType(SUCCESS)
                 .amount(100L)
                 .balanceSnapshot(100L)
                 .transactionId("transactionId")
@@ -260,7 +260,7 @@ class TransactionServiceTest {
                 .willReturn(Transaction.builder()
                         .account(account)
                         .transactionType(CANCEL)
-                        .transactionResultType(S)
+                        .transactionResultType(SUCCESS)
                         .amount(100L)
                         .balanceSnapshot(100L)
                         .transactionId("transactionId")
@@ -274,7 +274,7 @@ class TransactionServiceTest {
         //then
         assertEquals(100L, captor.getValue().getAmount());
         assertEquals(100L, captor.getValue().getBalanceSnapshot());
-        assertEquals(S, transactionDto.getTransactionResultType());
+        assertEquals(SUCCESS, transactionDto.getTransactionResultType());
         assertEquals(CANCEL, transactionDto.getTransactionType());
         assertEquals(100L, transactionDto.getAmount());
         assertEquals(100L, transactionDto.getBalanceSnapshot());
@@ -345,7 +345,7 @@ class TransactionServiceTest {
                 .id(2L)
                 .account(accountNotUse)
                 .transactionType(USE)
-                .transactionResultType(S)
+                .transactionResultType(SUCCESS)
                 .amount(100L)
                 .balanceSnapshot(100L)
                 .transactionId("transactionId")
@@ -375,7 +375,7 @@ class TransactionServiceTest {
                 .id(2L)
                 .account(account)
                 .transactionType(USE)
-                .transactionResultType(S)
+                .transactionResultType(SUCCESS)
                 .amount(100L)
                 .balanceSnapshot(100L)
                 .transactionId("transactionId")
@@ -407,7 +407,7 @@ class TransactionServiceTest {
                 .id(2L)
                 .account(account)
                 .transactionType(USE)
-                .transactionResultType(S)
+                .transactionResultType(SUCCESS)
                 .amount(100L)
                 .balanceSnapshot(100L)
                 .transactionId("transactionId")
@@ -437,7 +437,7 @@ class TransactionServiceTest {
                 .id(2L)
                 .account(account)
                 .transactionType(USE)
-                .transactionResultType(S)
+                .transactionResultType(SUCCESS)
                 .amount(100L)
                 .balanceSnapshot(100L)
                 .transactionId("transactionId")
@@ -451,7 +451,7 @@ class TransactionServiceTest {
         TransactionDto transactionDto = transactionService.queryTransaction("transactionId");
         //then
         assertEquals(USE, transactionDto.getTransactionType());
-        assertEquals(S, transactionDto.getTransactionResultType());
+        assertEquals(SUCCESS, transactionDto.getTransactionResultType());
         assertEquals(100L, transactionDto.getBalanceSnapshot());
         assertEquals(100L, transactionDto.getAmount());
         assertEquals("transactionId", transactionDto.getTransactionId());
