@@ -33,12 +33,16 @@ public class AccountService {
      */
     @Transactional
     public AccountDto createAccount(Long userId, Long initialBalance) {
-        Member member = memberRepository.findById(userId)
-                .orElseThrow(() -> new QuickPayException(USER_NOT_FOUND));
+        Member member = getMember(userId);
         validateCreateAccount(member);
         String newAccountNumber = createNewAccountNumber();
         Account account = accountRepository.save(createNewAccount(initialBalance, member, newAccountNumber));
         return AccountDto.fromEntity(account);
+    }
+
+    private Member getMember(Long userId) {
+        return memberRepository.findById(userId)
+                .orElseThrow(() -> new QuickPayException(USER_NOT_FOUND));
     }
 
     private void validateCreateAccount(Member member) {
@@ -65,10 +69,8 @@ public class AccountService {
 
     @Transactional
     public AccountDto deleteAccount(Long userId, String accountNumber) {
-        Member member = memberRepository.findById(userId)
-                .orElseThrow(() -> new QuickPayException(USER_NOT_FOUND));
-        Account account = accountRepository.findByAccountNumber(accountNumber)
-                .orElseThrow(() -> new QuickPayException(ErrorCode.ACCOUNT_NOT_FOUND));
+        Member member = getMember(userId);
+        Account account = getAccount(accountNumber);
 
         validateDeleteAccount(member, account);
 
@@ -76,6 +78,11 @@ public class AccountService {
         account.setUnRegisteredAt(LocalDateTime.now());
 
         return AccountDto.fromEntity(account);
+    }
+
+    private Account getAccount(String accountNumber) {
+        return accountRepository.findByAccountNumber(accountNumber)
+                .orElseThrow(() -> new QuickPayException(ErrorCode.ACCOUNT_NOT_FOUND));
     }
 
     private void validateDeleteAccount(Member member, Account account) {
@@ -91,8 +98,7 @@ public class AccountService {
     }
 
     public List<AccountDto> getAccountsByUserId(Long userId) {
-        Member member = memberRepository.findById(userId)
-                .orElseThrow(() -> new QuickPayException(USER_NOT_FOUND));
+        Member member = getMember(userId);
 
         List<Account> accounts = accountRepository.findByAccountUser(member);
 
