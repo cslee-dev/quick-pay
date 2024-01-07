@@ -1,6 +1,6 @@
-package com.example.quickpay.service;
+package com.example.quickpay.aop;
 
-import com.example.quickpay.aop.AccountLockIdInterface;
+import com.example.quickpay.service.LockService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
