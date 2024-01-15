@@ -11,15 +11,14 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-public class UseBalance {
+public class CancelBalance {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class Request implements AccountLockIdInterface{
+    public static class Request implements AccountLockIdInterface {
         @NotNull
-        @Min(1)
-        private Long userId;
+        private String transactionId;
 
         @NotBlank
         @Size(min = 10, max = 10)
@@ -43,7 +42,7 @@ public class UseBalance {
         private LocalDateTime transactedAt;
 
         public static Response from(TransactionDto transactionDto) {
-            return Response.builder()
+            return builder()
                     .accountNumber(transactionDto.getAccountNumber())
                     .transactionResult(transactionDto.getTransactionResultType())
                     .transactionId(transactionDto.getTransactionId())

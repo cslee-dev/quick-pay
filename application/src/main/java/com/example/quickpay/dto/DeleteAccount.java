@@ -37,7 +37,7 @@ public class DeleteAccount {
         private LocalDateTime unRegisteredAt;
 
         public static Response from(AccountDto accountDto) {
-            return Response.builder()
+            return builder()
                     .userId(accountDto.getUserId())
                     .accountNumber(accountDto.getAccountNumber())
                     .unRegisteredAt(accountDto.getUnRegisteredAt())

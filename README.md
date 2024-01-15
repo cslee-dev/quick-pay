@@ -18,3 +18,8 @@ docker compose up -d
 ```shell
 docker compose down
 ```
+
+## application 실행
+```shell
+./gradlew application:bootRun
+```

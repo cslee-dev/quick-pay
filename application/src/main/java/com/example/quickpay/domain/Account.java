@@ -1,8 +1,8 @@
 package com.example.quickpay.domain;
 
 
-import com.example.quickpay.exception.QuickPayException;
 import com.example.quickpay.type.AccountStatus;
+import com.example.quickpay.exception.QuickPayException;
 import com.example.quickpay.type.ErrorCode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

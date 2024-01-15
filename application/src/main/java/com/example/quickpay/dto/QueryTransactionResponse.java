@@ -23,7 +23,7 @@ public class QueryTransactionResponse {
     private LocalDateTime transactedAt;
 
     public static QueryTransactionResponse from(TransactionDto transactionDto) {
-        return QueryTransactionResponse.builder()
+        return builder()
                 .accountNumber(transactionDto.getAccountNumber())
                 .transactionType(transactionDto.getTransactionType())
                 .transactionResult(transactionDto.getTransactionResultType())

@@ -16,7 +16,7 @@ public class AccountInfo {
 
 
     public static AccountInfo from(AccountDto accountDto) {
-        return AccountInfo.builder()
+        return builder()
                 .accountNumber(accountDto.getAccountNumber())
                 .balance(accountDto.getBalance())
                 .build();
