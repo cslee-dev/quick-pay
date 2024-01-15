@@ -1,6 +1,6 @@
 package com.example.quickpay.service.dto;
 
-import com.example.quickpay.domain.Account;
+import com.example.quickpay.domain.mysql.entity.Account;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

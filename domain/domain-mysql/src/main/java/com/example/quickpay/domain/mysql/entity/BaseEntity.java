@@ -1,4 +1,4 @@
-package com.example.quickpay.domain;
+package com.example.quickpay.domain.mysql.entity;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;

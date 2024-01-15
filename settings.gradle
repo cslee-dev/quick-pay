@@ -1,3 +1,6 @@
 rootProject.name = 'quickpay'
 include 'application'
+include 'domain:domain-mysql'
+findProject(':domain:domain-mysql')?.name = 'domain-mysql'
+include 'common'
 

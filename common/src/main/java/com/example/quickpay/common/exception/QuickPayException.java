@@ -1,6 +1,6 @@
-package com.example.quickpay.exception;
+package com.example.quickpay.common.exception;
 
-import com.example.quickpay.type.ErrorCode;
+import com.example.quickpay.common.type.ErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

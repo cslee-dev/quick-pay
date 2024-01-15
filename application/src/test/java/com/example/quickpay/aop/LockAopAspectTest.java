@@ -1,7 +1,7 @@
 package com.example.quickpay.aop;
 
+import com.example.quickpay.common.exception.QuickPayException;
 import com.example.quickpay.dto.UseBalance;
-import com.example.quickpay.exception.QuickPayException;
 import com.example.quickpay.service.LockService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.example.quickpay.type.ErrorCode.ACCOUNT_NOT_FOUND;
+import static com.example.quickpay.common.type.ErrorCode.ACCOUNT_NOT_FOUND;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;

@@ -1,13 +1,13 @@
 package com.example.quickpay.service;
 
-import com.example.quickpay.domain.Account;
-import com.example.quickpay.domain.Member;
-import com.example.quickpay.exception.QuickPayException;
-import com.example.quickpay.repository.AccountRepository;
-import com.example.quickpay.repository.MemberRepository;
+import com.example.quickpay.common.exception.QuickPayException;
+import com.example.quickpay.common.type.AccountStatus;
+import com.example.quickpay.common.type.ErrorCode;
+import com.example.quickpay.domain.mysql.entity.Account;
+import com.example.quickpay.domain.mysql.entity.Member;
+import com.example.quickpay.domain.mysql.repository.AccountRepository;
+import com.example.quickpay.domain.mysql.repository.MemberRepository;
 import com.example.quickpay.service.dto.AccountDto;
-import com.example.quickpay.type.AccountStatus;
-import com.example.quickpay.type.ErrorCode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,8 +1,8 @@
 package com.example.quickpay.controller;
 
+import com.example.quickpay.common.exception.QuickPayException;
 import com.example.quickpay.dto.CreateAccount;
 import com.example.quickpay.dto.DeleteAccount;
-import com.example.quickpay.exception.QuickPayException;
 import com.example.quickpay.service.AccountService;
 import com.example.quickpay.service.dto.AccountDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.example.quickpay.type.ErrorCode.ACCOUNT_NOT_FOUND;
+import static com.example.quickpay.common.type.ErrorCode.ACCOUNT_NOT_FOUND;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.anyLong;
 import static org.mockito.BDDMockito.given;

@@ -1,7 +1,7 @@
 package com.example.quickpay.service;
 
-import com.example.quickpay.exception.QuickPayException;
-import com.example.quickpay.type.ErrorCode;
+import com.example.quickpay.common.exception.QuickPayException;
+import com.example.quickpay.common.type.ErrorCode;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

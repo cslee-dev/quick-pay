@@ -1,4 +1,4 @@
-package com.example.quickpay.config;
+package com.example.quickpay.domain.mysql.config;
 
 
 import org.springframework.context.annotation.Configuration;

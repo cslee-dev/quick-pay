@@ -1,8 +1,8 @@
 package com.example.quickpay.service.dto;
 
-import com.example.quickpay.domain.Transaction;
-import com.example.quickpay.type.TransactionResultType;
-import com.example.quickpay.type.TransactionType;
+import com.example.quickpay.common.type.TransactionResultType;
+import com.example.quickpay.common.type.TransactionType;
+import com.example.quickpay.domain.mysql.entity.Transaction;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

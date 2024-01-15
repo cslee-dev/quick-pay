@@ -1,7 +1,7 @@
-package com.example.quickpay.domain;
+package com.example.quickpay.domain.mysql.entity;
 
-import com.example.quickpay.type.TransactionResultType;
-import com.example.quickpay.type.TransactionType;
+import com.example.quickpay.common.type.TransactionResultType;
+import com.example.quickpay.common.type.TransactionType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

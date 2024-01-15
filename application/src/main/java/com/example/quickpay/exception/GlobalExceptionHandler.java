@@ -1,5 +1,6 @@
 package com.example.quickpay.exception;
 
+import com.example.quickpay.common.exception.QuickPayException;
 import com.example.quickpay.exception.dto.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -7,8 +8,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import static com.example.quickpay.type.ErrorCode.INTERNAL_SERVER_ERROR;
-import static com.example.quickpay.type.ErrorCode.INVALID_REQUEST;
+import static com.example.quickpay.common.type.ErrorCode.INTERNAL_SERVER_ERROR;
+import static com.example.quickpay.common.type.ErrorCode.INVALID_REQUEST;
 
 @Slf4j
 @RestControllerAdvice

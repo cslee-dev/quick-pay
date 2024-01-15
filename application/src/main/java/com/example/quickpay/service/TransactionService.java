@@ -1,30 +1,30 @@
 package com.example.quickpay.service;
 
-import com.example.quickpay.domain.Transaction;
-import com.example.quickpay.repository.AccountRepository;
-import com.example.quickpay.repository.MemberRepository;
-import com.example.quickpay.repository.TransactionRepository;
-import com.example.quickpay.domain.Account;
-import com.example.quickpay.domain.Member;
-import com.example.quickpay.exception.QuickPayException;
+import com.example.quickpay.common.exception.QuickPayException;
+import com.example.quickpay.common.type.AccountStatus;
+import com.example.quickpay.common.type.ErrorCode;
+import com.example.quickpay.common.type.TransactionResultType;
+import com.example.quickpay.common.type.TransactionType;
+import com.example.quickpay.domain.mysql.entity.Account;
+import com.example.quickpay.domain.mysql.entity.Member;
+import com.example.quickpay.domain.mysql.entity.Transaction;
+import com.example.quickpay.domain.mysql.repository.AccountRepository;
+import com.example.quickpay.domain.mysql.repository.MemberRepository;
+import com.example.quickpay.domain.mysql.repository.TransactionRepository;
 import com.example.quickpay.service.dto.TransactionDto;
-import com.example.quickpay.type.AccountStatus;
-import com.example.quickpay.type.ErrorCode;
-import com.example.quickpay.type.TransactionResultType;
-import com.example.quickpay.type.TransactionType;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
-import static com.example.quickpay.type.TransactionResultType.FAILED;
-import static com.example.quickpay.type.TransactionResultType.SUCCESS;
-import static com.example.quickpay.type.TransactionType.CANCEL;
-import static com.example.quickpay.type.TransactionType.USE;
+import static com.example.quickpay.common.type.TransactionResultType.FAILED;
+import static com.example.quickpay.common.type.TransactionResultType.SUCCESS;
+import static com.example.quickpay.common.type.TransactionType.CANCEL;
+import static com.example.quickpay.common.type.TransactionType.USE;
 
 @Slf4j
 @Service

@@ -1,8 +1,8 @@
 package com.example.quickpay.dto;
 
 import com.example.quickpay.aop.AccountLockIdInterface;
+import com.example.quickpay.common.type.TransactionResultType;
 import com.example.quickpay.service.dto.TransactionDto;
-import com.example.quickpay.type.TransactionResultType;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

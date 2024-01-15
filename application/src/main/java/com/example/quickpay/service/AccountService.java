@@ -1,23 +1,23 @@
 package com.example.quickpay.service;
 
-import com.example.quickpay.domain.Account;
-import com.example.quickpay.domain.Member;
-import com.example.quickpay.exception.QuickPayException;
-import com.example.quickpay.repository.AccountRepository;
-import com.example.quickpay.repository.MemberRepository;
-import com.example.quickpay.type.AccountStatus;
+import com.example.quickpay.common.exception.QuickPayException;
+import com.example.quickpay.common.type.AccountStatus;
+import com.example.quickpay.common.type.ErrorCode;
+import com.example.quickpay.domain.mysql.entity.Account;
+import com.example.quickpay.domain.mysql.entity.Member;
+import com.example.quickpay.domain.mysql.repository.AccountRepository;
+import com.example.quickpay.domain.mysql.repository.MemberRepository;
 import com.example.quickpay.service.dto.AccountDto;
-import com.example.quickpay.type.ErrorCode;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static com.example.quickpay.type.ErrorCode.*;
+import static com.example.quickpay.common.type.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor

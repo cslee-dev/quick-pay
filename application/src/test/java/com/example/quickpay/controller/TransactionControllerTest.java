@@ -16,8 +16,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDateTime;
 
-import static com.example.quickpay.type.TransactionResultType.SUCCESS;
-import static com.example.quickpay.type.TransactionType.USE;
+import static com.example.quickpay.common.type.TransactionResultType.SUCCESS;
+import static com.example.quickpay.common.type.TransactionType.USE;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;

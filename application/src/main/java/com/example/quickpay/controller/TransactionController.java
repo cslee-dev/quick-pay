@@ -1,10 +1,10 @@
 package com.example.quickpay.controller;
 
 import com.example.quickpay.aop.AccountLock;
+import com.example.quickpay.common.exception.QuickPayException;
 import com.example.quickpay.dto.CancelBalance;
 import com.example.quickpay.dto.QueryTransactionResponse;
 import com.example.quickpay.dto.UseBalance;
-import com.example.quickpay.exception.QuickPayException;
 import com.example.quickpay.service.TransactionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

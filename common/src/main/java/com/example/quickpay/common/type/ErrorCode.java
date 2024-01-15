@@ -1,4 +1,4 @@
-package com.example.quickpay.type;
+package com.example.quickpay.common.type;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

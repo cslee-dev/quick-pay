@@ -1,9 +1,9 @@
-package com.example.quickpay.domain;
+package com.example.quickpay.domain.mysql.entity;
 
 
-import com.example.quickpay.type.AccountStatus;
-import com.example.quickpay.exception.QuickPayException;
-import com.example.quickpay.type.ErrorCode;
+import com.example.quickpay.common.exception.QuickPayException;
+import com.example.quickpay.common.type.AccountStatus;
+import com.example.quickpay.common.type.ErrorCode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

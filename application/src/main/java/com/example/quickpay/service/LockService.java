@@ -1,7 +1,7 @@
 package com.example.quickpay.service;
 
-import com.example.quickpay.exception.QuickPayException;
-import com.example.quickpay.type.ErrorCode;
+import com.example.quickpay.common.exception.QuickPayException;
+import com.example.quickpay.common.type.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RLock;
